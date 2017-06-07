@@ -1,0 +1,50 @@
+<div class="container">
+  <h1>Register</h1>
+  <p class="lead">Already a member? Please <a href="login">log in</a> instead.</p>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
+    <div class="form-group">
+
+      <label>Name</label>
+      <input type="text" #varName="ngModel" class="form-control" name="name" ngModel required minlength="4" maxlength="20">
+
+      <div *ngIf="varName.errors && (varName.dirty || varName.touched)" class="alert alert-danger">
+        <div [hidden]="!varName.errors.required">
+          Name is required
+        </div>
+        <div [hidden]="!varName.errors.minlength">
+          Name must be at least 4 characters long.
+        </div>
+        <div [hidden]="!varName.errors.maxlength">
+          Name cannot exceed 10 characters.
+        </div>
+      </div>
+
+      <label>Email</label>
+      <input type="email" #varName="ngModel" class="form-control" name="email" ngModel required minlength="4" maxlength="30">
+
+
+      <label>Password</label>
+      <input type="password" #varPassword="ngModel" class="form-control" name="password" ngModel required minlength="4" maxlength="20">
+      <div *ngIf="varPassword.errors && (varPassword.dirty || varPassword.touched)" class="alert alert-danger">
+        <div [hidden]="!varPassword.errors.required">
+          Password is required
+        </div>
+        <div [hidden]="!varPassword.errors.minlength">
+          Password must be at least 4 characters long.
+        </div>
+        <div [hidden]="!varPassword.errors.maxlength">
+          Password cannot exceed 10 characters.
+        </div>
+      </div>
+
+    </div>
+
+    <select name="role" #varRole="ngModel" ngModel required>
+      <option value="">---Select role---</option>
+      <option value="admin">admin</option>
+      <option value="user">user</option>
+    </select><br><br>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!userForm.form.valid">Submit</button>
+  </form>
+</div>

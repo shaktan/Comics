@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-md-4" *ngFor = "let item of comics">
+      <div class="thumbnail">
+        <!-- <img src="..." alt="..."> -->
+        <div class="caption">
+          <img src="{{item.image}}" alt="comic image">
+          <h3>{{item.comicName}}</h3>
+          <p>description : {{item.story}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
