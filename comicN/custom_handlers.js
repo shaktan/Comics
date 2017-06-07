@@ -8,6 +8,16 @@ exports.successResponse = function(data){
   return body;
 }
 
+exports.successResponseToken = function(data,token){
+  body = {
+    "body": data,
+    "token": token,
+    "success": true,
+    "status": 200
+  }
+  return body;
+}
+
 // Custom Failure Response
 exports.failureResponse = function(data){
   body = {
