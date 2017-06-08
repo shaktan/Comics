@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
   constructor(private serve: ServeService, private router: Router) { }
 
   ngOnInit() {
+
   }
   onSubmit(data){
     this.serve.login(data).subscribe(res => {
@@ -21,12 +22,13 @@ export class LoginComponent implements OnInit {
       else{
         // localStorage.removeItem('role');
         localStorage.setItem('role', res.body.role);
-        this.serve.settoken(res.token);
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('email', res.body.email)
 
         switch(res.body.role) {
          case "superadmin": this.router.navigate(["/superadmin"])
            break;
-         case "admin": this.router.navigate(["/admin"])
+         case "admin": this.router.navigate(["/home"])
            break;
          case "user": this.router.navigate(["/home"])
            break;

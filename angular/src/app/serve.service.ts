@@ -10,13 +10,24 @@ import { Configuration } from "./config";
 export class ServeService {
 
   constructor(private http: Http, private url: Configuration) { }
-  token;
+
+  subs(sub): Observable<any> {
+    let headers = new Headers({'Content-Type': 'application/json','Authorization': 'Bearer ' + localStorage.getItem('token')});
+    let options = new RequestOptions({ headers: headers });
+    console.log(sub);
+    console.log(this.url.api.subscription);
+    console.log(options)
+    return this.http.post(this.url.api.subscription, sub, options)
+      .map((res: Response) => res.json())
+      .catch(this.errHandler);
+  }
   register(data) {
     console.log(data);
     let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this.url.api.register, data, headers)
-      .map((res: Response) => res.json());
+      .map((res: Response) => res.json())
+      .catch(this.errHandler);
   }
 
   login(data) {
@@ -25,7 +36,8 @@ export class ServeService {
     // 'Authorization': 'Bearer '+ this.token
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this.url.api.login, data, headers)
-      .map((res: Response) => res.json());
+      .map((res: Response) => res.json())
+      .catch(this.errHandler);
   }
 
   getUsers() {
@@ -40,7 +52,16 @@ export class ServeService {
       .catch(this.errHandler);
   }
 
+  addSeries(data): Observable<any> {
+    console.log(data)
+    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + localStorage.getItem('token')});
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this.url.api.postseries, data, options)
+      .map((res: Response) => res.json());
+  }
+
   getSeasons(seriesId) {
+    console.log(seriesId)
     return this.http.get(this.url.api.getseasons + "/" + seriesId)
       .map((res: Response) => res.json())
       .catch(this.errHandler);
@@ -56,7 +77,5 @@ export class ServeService {
     console.error(error);
     return Observable.throw(error || "Server Error");
   }
-settoken(token){
-  this.token = token;
-}
+
 }

@@ -7,7 +7,6 @@ import { SeasonsComponent } from '../seasons/seasons.component';
 import { ComicsComponent } from '../comics/comics.component';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
-import { ProfileComponent } from '../profile/profile.component';
 import { SuperadminComponent } from '../superadmin/superadmin.component';
 import { AuthService } from '../auth.service';
 
@@ -23,7 +22,6 @@ const routes: Routes = [
     canActivate: [AuthService]
   },
   {'path':'register', 'component': RegisterComponent},
-  {'path':'profile', 'component': ProfileComponent},
   {'path':'home/seasons/:seriesid', 'component': SeasonsComponent},
   {'path':'home/comics/:seriesid/:seasonid', 'component': ComicsComponent},
   { path: '**', component: HomepageComponent }                //wildcard path to handle unmatched url (angular matches the url to the configured route from the top).
@@ -38,4 +36,4 @@ const routes: Routes = [
   ]
 })
 export class RoutesModule { }
-export const RoutingComponents = [HomepageComponent, SeasonsComponent, ComicsComponent, LoginComponent, RegisterComponent, SuperadminComponent, ProfileComponent];
+export const RoutingComponents = [HomepageComponent, SeasonsComponent, ComicsComponent, LoginComponent, RegisterComponent, SuperadminComponent];

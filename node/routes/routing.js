@@ -10,8 +10,11 @@ var auth = jwt({
 var Controller = require('../controllers/main');
 
 router.get('/random/:code', Controller.random);
+// router.post('/subscription', Controller.subscription);
+router.route('/subscription')
+.post(Controller.subscription)
 // profile
-router.get('/profile', auth, Controller.profileRead);
+// router.get('/profile', auth, Controller.profileRead);
 
 // authentication
 router.route('/register')
@@ -19,8 +22,6 @@ router.route('/register')
 router.post('/login', Controller.login);
 
 
-router.route('/post_user')
-  .post(Controller.postUser);
 router.route('/post_series')
   .post(Controller.postSeries);
 router.route('/post_season')

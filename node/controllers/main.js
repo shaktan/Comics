@@ -3,7 +3,23 @@ var customHandlers = require('../custom_handlers');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
+exports.subscription = function(req, res){
+  var seriesId  = req.body.seriesId;
+  var email     = req.body.email;
 
+  schema.Series.findOne({seriesId: seriesId}, function(err, series){
+    if(err){
+      return res.send(customHandlers.failureResponse(err));
+    }
+    if(series){
+      series.subscribers.push(email);
+      console.log(series);
+      // console.log(email);
+    }
+
+  })
+
+}
 exports.random = function(req, res){
   var id = req.params.code;
   schema.Users.findOne({code: id}, function(err, user){
@@ -34,6 +50,8 @@ exports.register = function(req, res) {
   user.active = false;
   user.code = Math.random();
   var url = "http://192.168.14.217:2000/api/random/" + user.code;
+
+  var url2 = "http:192.168.14.217:4200/login1"
   console.log(url);
   console.log(user.email);
 
@@ -84,12 +102,13 @@ exports.register = function(req, res) {
 exports.login = function(req, res) {
 
   var userName = req.body.name;
+  var role = req.body.role;
 
   var shasum = crypto.createHash('sha1');
   shasum.update(req.body.password);
   var password = shasum.digest('hex');
 
-  schema.Users.findOne({userName: userName, password: password}, function(err, user) {
+  schema.Users.findOne({userName: userName, password: password, role: role}, function(err, user) {
     if (err) {
       return res.send(customHandlers.failureResponse(err));
     }
@@ -200,19 +219,26 @@ exports.deleteUser = function(req, res) {
 
 // creating a series, only admin can use this API
 exports.postSeries = function(req, res) {
-  var series = new schema.Series({
-    seriesId      : req.body.seriesId,
-    seriesName    : req.body.seriesName,
-    description   : req.body.description,
-    createdBy     : req.body.createdBy
-  });
+  schema.Series.find({}, function (err, response) { // Function to Find all the Users from collection
+      if (err) {
+          return res.json(req, res, err);
+      }
+      var id = response[0].seriesId;
+      var series = new schema.Series({
+        seriesId      : id + 1,
+        seriesName    : req.body.seriesName,
+        description   : req.body.description,
+        createdBy     : req.body.createdBy
+      });
 
-  series.save(function(err, response) {
-    if (err) {
-      return res.send(customHandlers.failureResponse(err));
-    }
-    res.json(customHandlers.successResponse(response));
-  });
+      series.save(function(err, response) {
+        if (err) {
+          return res.send(customHandlers.failureResponse(err));
+        }
+        res.json(customHandlers.successResponse(response));
+      });
+      console.log(id);
+    }).sort({seriesId: -1}).limit(1);
 }
 
 

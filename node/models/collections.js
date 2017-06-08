@@ -25,6 +25,7 @@ var seriesSchema = new Schema({
   seriesName    : {type : String, required : true, unique : true},
   description   : String,
   createdBy     : String,
+  subscribers   : [],
   createdDate   : {type: Date, default: Date.now()},
   updatedDate   : Date
 });

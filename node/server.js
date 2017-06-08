@@ -7,8 +7,9 @@ routes = require('./routes/routing')
 require('./models/collections');
 require('./config/passport');
 var expressJWT = require('express-jwt');
-var regex = RegExp("random")
-
+var regex = RegExp("random");
+var seasonsregex = new RegExp("get_series");
+var comicsregex = new RegExp("get_comics");
 
 
 // Connecting to the DB
@@ -17,7 +18,6 @@ mongoose.Promise = global.Promise;
 
 // Create Express application
 var app = module.exports = express();
-
 var NODE_ENV = 'development';
 //Set Variables
 app.set('env', process.env.NODE_ENV || 'production');
@@ -25,13 +25,15 @@ app.set('env', process.env.NODE_ENV || 'production');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(expressJWT({secret: 'shaktan'}).unless({path: ['/api/get_users',regex,'/api/get_series','/api/get_seasons','/api/get_comics','/api/register','/api/login', '/favicon.ico']}));
+
+app.use(expressJWT({secret: 'shaktan'}).unless({path: ['/api/get_users','/api/get_series',regex,seasonsregex,,comicsregex,'/api/register','/api/login', '/favicon.ico']}));
 
 
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    // res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
     next();
 });
 

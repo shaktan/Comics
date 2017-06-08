@@ -9,7 +9,6 @@ export class AuthService implements CanActivate {
     var x = route.data;
 
     if (x[0].role == localStorage.getItem("role")) {
-      console.log("yes");
       return true;
     }
     else {

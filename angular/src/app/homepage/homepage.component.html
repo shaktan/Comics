@@ -3,15 +3,32 @@
 
     <div class="col-sm-6 col-md-4" *ngFor = "let item of series">
       <div class="thumbnail">
-        <img src="..." alt="...">
         <div class="caption">
           <h3>{{item.seriesName}}</h3>
           <h6>by : {{item.createdBy}}</h6>
           <p>description : {{item.description}}</p>
           <button (click)="selectSeasons(item.seriesId)" class="btn btn-default">Seasons</button>
+          <button class="btn btn-success" *ngIf="check()" (click)="set()">Edit</button>
+          <button class="btn btn-danger" *ngIf="check()" (click)="remove()">Remove</button>
+          <button class="btn btn-info" *ngIf="check()" (click)="subscribe(item.seriesId)">subscribe</button>
         </div>
       </div>
     </div>
 
+  </div>
+  <div *ngIf="flag">
+    <h2>update series!!!</h2>
+  </div>
+  <div *ngIf="checkquery()">
+    <h2>create a new series!!!</h2>
+    <div class="container">
+
+    <form #details='ngForm' (ngSubmit)="addseries(details.value)" >
+      <input type="text" name="seriesName" #Series placeholder="Enter the series name" ngModel required minlength="3" maxlength="20">
+      <input type="text" name="description" #Data placeholder="Enter description" ngModel required minlength="5" maxlength="50">
+      <input type="text" name="createdBy" #Data placeholder="Created by" ngModel required minlength="3" maxlength="20">
+      <input type="submit">
+    </form>
+  </div>
   </div>
 </div>

@@ -9,9 +9,9 @@ import { RoutesModule } from './routes/routes.module';
 import { HeaderComponent } from './header/header.component';
 import { Configuration } from "./config";
 import { SeasonsComponent } from './seasons/seasons.component';
-import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthService } from './auth.service';
+
 
 
 
