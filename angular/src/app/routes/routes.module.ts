@@ -14,6 +14,7 @@ import { AuthService } from '../auth.service';
 const routes: Routes = [
   {'path':'', 'redirectTo':'/home', 'pathMatch':'full'},
   {'path':'home', 'component': HomepageComponent},
+  {'path':'home/:id', 'component': HomepageComponent},
   {'path':'login', 'component': LoginComponent},
   {'path':'superadmin', 'component': SuperadminComponent,
     data: [

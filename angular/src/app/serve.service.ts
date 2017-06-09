@@ -54,10 +54,21 @@ export class ServeService {
 
   addSeries(data): Observable<any> {
     console.log(data)
-    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + localStorage.getItem('token')});
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token')});
     let options = new RequestOptions({ headers: headers });
+    // console.log(options)
     return this.http.post(this.url.api.postseries, data, options)
-      .map((res: Response) => res.json());
+      .map((res: Response) => res.json())
+      .catch(this.errHandler);
+  }
+
+  addSeason(data): Observable<any> {
+    console.log(data)
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token')});
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this.url.api.postseason, data, options)
+      .map((res: Response) => res.json())
+      .catch(this.errHandler);
   }
 
   getSeasons(seriesId) {

@@ -7,6 +7,7 @@ export class Configuration {
     login      : "http://localhost:2000/api/login",
     getusers   : "http://localhost:2000/api/get_users",
     postseries : "http://localhost:2000/api/post_series",
+    postseason : "http://localhost:2000/api/post_season",
     subscription : "http://localhost:2000/api/subscription"
   }
 }

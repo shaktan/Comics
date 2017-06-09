@@ -3,6 +3,16 @@ var customHandlers = require('../custom_handlers');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'navjot.kumar@kelltontech.com',
+        pass: 'shakTaN#/.'
+    }
+});
+
+
 exports.subscription = function(req, res){
   var seriesId  = req.body.seriesId;
   var email     = req.body.email;
@@ -14,7 +24,11 @@ exports.subscription = function(req, res){
     if(series){
       series.subscribers.push(email);
       console.log(series);
-      // console.log(email);
+      series.save(function(err, response) {
+        if (err) {
+          return res.send(customHandlers.failureResponse(err));
+        }
+      });
     }
 
   })
@@ -33,6 +47,7 @@ exports.random = function(req, res){
         if (err) {
           return res.send(customHandlers.failureResponse(err));
         }
+        res.json("you have been registered");
       });
     }
     else{
@@ -56,13 +71,6 @@ exports.register = function(req, res) {
   console.log(user.email);
 
 
-  var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-          user: 'navjot.kumar@kelltontech.com',
-          pass: 'shakTaN#/.'
-      }
-  });
 
   var mailOptions = {
       from: "navjot.kumar@kelltontech.com",
@@ -223,14 +231,16 @@ exports.postSeries = function(req, res) {
       if (err) {
           return res.json(req, res, err);
       }
+      console.log(req.body);
+      console.log(req.body.seriesName)
       var id = response[0].seriesId;
+
       var series = new schema.Series({
         seriesId      : id + 1,
         seriesName    : req.body.seriesName,
         description   : req.body.description,
         createdBy     : req.body.createdBy
       });
-
       series.save(function(err, response) {
         if (err) {
           return res.send(customHandlers.failureResponse(err));
@@ -306,20 +316,58 @@ exports.deleteSeries = function(req, res) {
 
 // creating a season, only admin can use this API
 exports.postSeason = function(req, res) {
-  var season = new schema.Seasons({
-    seriesId      : req.body.seriesId,
-    seasonId      : req.body.seasonId,
-    seasonName    : req.body.seasonName,
-    description   : req.body.description,
-    startsOn      : req.body.startsOn,
-    endsOn        : req.body.endsOn
-  });
-
-  season.save(function(err, response) {
+  var seriesName = req.body.seriesName;
+  var seriesId;
+  schema.Series.findOne({seriesName: seriesName}, function(err, series){
     if (err) {
       return res.send(customHandlers.failureResponse(err));
     }
-    res.json(customHandlers.successResponse(response));
+    if(series){
+      seriesId = series.seriesId;
+      schema.Seasons.find({}, function (err, response) { // Function to Find all the Users from collection
+          if (err) {
+              return res.send(customHandlers.failureResponse(err));
+          }
+
+          var id = response[0].seasonId;
+          var season = new schema.Seasons({
+            seriesId      : seriesId,
+            seasonId      : id + 1,
+            seasonName    : req.body.seasonName,
+            description   : req.body.description,
+          });
+          season.save(function(err, response) {
+            if (err) {
+              return res.send(customHandlers.failureResponse(err));
+            }
+            res.json(customHandlers.successResponse(response));
+          });
+          var seasonName = season.seasonName;
+          for(var i=0; i < series.subscribers.length; i++){
+            var mailOptions = {
+                from: "navjot.kumar@kelltontech.com",
+                to:  series.subscribers[i],
+                subject: 'new season is added to your subscribed series!!!',
+                html: '<h3>new season added!!!</h3>'
+            };
+
+            transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+
+          }
+
+
+        }).sort({seriesId: -1}).limit(1);
+
+    }
+    else{
+      return res.send("Series doesn't exit!!!");
+    }
   });
 }
 

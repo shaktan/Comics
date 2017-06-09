@@ -8,7 +8,7 @@ require('./models/collections');
 require('./config/passport');
 var expressJWT = require('express-jwt');
 var regex = RegExp("random");
-var seasonsregex = new RegExp("get_series");
+var seasonsregex = new RegExp("get_seasons");
 var comicsregex = new RegExp("get_comics");
 
 
@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-app.use(expressJWT({secret: 'shaktan'}).unless({path: ['/api/get_users','/api/get_series',regex,seasonsregex,,comicsregex,'/api/register','/api/login', '/favicon.ico']}));
+app.use(expressJWT({secret: 'shaktan'}).unless({path: ['/api/get_users','/api/get_series',regex,seasonsregex,comicsregex,'/api/register','/api/login', '/favicon.ico']}));
 
 
 

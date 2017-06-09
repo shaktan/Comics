@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HomepageComponent } from '../homepage/homepage.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
+  providers: [HomepageComponent]
 })
 export class HeaderComponent implements OnInit {
   role:String;
-  constructor(private router: Router) { }
+  constructor(private router: Router , public home : HomepageComponent) { }
 
   ngOnInit() {
   }
